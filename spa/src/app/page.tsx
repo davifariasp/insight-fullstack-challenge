@@ -3,18 +3,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Provider from "../app/models/ProviderModel";
-import FormProvider from "./components/form_provider";
+import FormRegister from "./components/form_register";
+import FormEdit from "./components/form_edit";
 import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
 
 export default function Home() {
   const [providers, setProviders] = useState<Provider[]>([]);
+
+  const [id, setId] = useState<Number>(0);
 
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/provider/all")
+      .get(`${process.env.NEXT_PUBLIC_URL_API}/provider/all`)
       .then((response) => {
         const newProviders: Provider[] = [];
 
@@ -36,14 +39,32 @@ export default function Home() {
       });
   }, []);
 
-  const handleOpenModal = () => {
+  const handleOpenModalCreate = () => {
     setIsModalCreateOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModalCreate = () => {
     setIsModalCreateOpen(false);
   };
 
+  const handleOpenModalEdit = () => {
+    setIsModalEditOpen(true);
+  };
+
+  const handleCloseModalEdit = () => {
+    setIsModalEditOpen(false);
+  };
+
+  const handleRemove = (id: Number) => {
+    axios
+      .delete(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${id}`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="flex-col bg-slate-500 h-screen">
@@ -86,10 +107,14 @@ export default function Home() {
                   <td className="px-6 py-4">{provider.type}</td>
                   <td className="px-6 py-4">{provider.additionalInfo}</td>
                   <td className="px-6 py-4 space-x-4">
-                    <button>
+                    <button onClick={() => {
+                      setId(provider.id);
+                      setIsModalEditOpen(true);
+                    }
+                    }>
                       <PencilIcon className="w-6 p-1 bg-yellow-400 text-white rounded-lg" />
                     </button>
-                    <button>
+                    <button onClick={() => handleRemove(provider.id)}>
                       <TrashIcon className="w-6 p-1 bg-red-400 text-white rounded-lg" />{" "}
                     </button>
                   </td>
@@ -99,7 +124,20 @@ export default function Home() {
           </tbody>
         </table>
 
-        {isModalCreateOpen ? <FormProvider isOpen={isModalCreateOpen} onClose={handleCloseModal} /> : <></>}
+        {isModalCreateOpen ? (
+          <FormRegister
+            isOpen={isModalCreateOpen}
+            onClose={handleCloseModalCreate}
+          />
+        ) : (
+          <></>
+        )}
+
+        {isModalEditOpen ? (
+          <FormEdit id={id} isOpen={isModalEditOpen} onClose={handleCloseModalEdit} />
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
