@@ -1,0 +1,17 @@
+Tecnologiasa a serem usadas
+Bakcend: Java + Springboot
+BD: Postgres
+Front: NextJS + TS
+
+Descrição: 
+Modulo de cadastro de fornecedores
+
+Backend:
+  - Cadastrar fornecedores
+  - Listar Fornecedores cadastrados
+  - Editar, visualizar e excluir fornecedores cadastrados
+
+Telas Frontend:
+  - Tela de cadastro de fornecedores
+  - Tela de listagem de fornecedores com botoes de acção (CRUD)
+  - Tela de edição de fornecedores
