@@ -1,144 +1,76 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import axios from "axios";
-import Provider from "../app/models/ProviderModel";
-import FormRegister from "./components/form_register";
-import FormEdit from "./components/form_edit";
-import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
+import logoInsightLab from "./assets/logo-insight.png";
+import { UserIcon, KeyIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { FormEvent, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Loading from "./components/loading";
 
-export default function Home() {
-  const [providers, setProviders] = useState<Provider[]>([]);
+export default function Login() {
+  const router = useRouter();
 
-  const [id, setId] = useState<Number>(0);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [typePass, setTypePass] = useState("password");
 
-  const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
-  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_URL_API}/provider/all`)
-      .then((response) => {
-        const newProviders: Provider[] = [];
+  function handleTypePass() {
+    setTypePass(typePass === "password" ? "text" : "password");
+  }
 
-        response.data.map((provider: Provider) => {
-          const newProvider: Provider = new Provider(
-            provider.id,
-            provider.name,
-            provider.contact,
-            provider.type,
-            provider.additionalInfo
-          );
-          newProviders.push(newProvider);
-        });
+  const handleSignIn = (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-        setProviders(newProviders);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  const handleOpenModalCreate = () => {
-    setIsModalCreateOpen(true);
-  };
-
-  const handleCloseModalCreate = () => {
-    setIsModalCreateOpen(false);
-  };
-
-  const handleOpenModalEdit = () => {
-    setIsModalEditOpen(true);
-  };
-
-  const handleCloseModalEdit = () => {
-    setIsModalEditOpen(false);
-  };
-
-  const handleRemove = (id: Number) => {
-    axios
-      .delete(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${id}`)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setTimeout(() => {
+      router.push("/home");
+    }, 2000);
   };
 
   return (
-    <div className="flex-col bg-slate-500 h-screen">
-      <div className="flex space-x-2 justify-center">
-        <h1 className="text-3xl font-bold">Lista de Fornecedores</h1>
-        <button
-          className="bg-green-500 text-white py-1 px-4 rounded-xl"
-          onClick={(e) => setIsModalCreateOpen(true)}
-        >
-          Adicionar
-        </button>
-      </div>
-      <div className="flex justify-center">
-        <table className="text-sm text-left">
-          <thead>
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Nome
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Contato
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Tipo
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Descrição
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {providers.map((provider, index) => {
-              return (
-                <tr key={index}>
-                  <td className="px-6 py-4">{provider.name}</td>
-                  <td className="px-6 py-4">{provider.contact}</td>
-                  <td className="px-6 py-4">{provider.type}</td>
-                  <td className="px-6 py-4">{provider.additionalInfo}</td>
-                  <td className="px-6 py-4 space-x-4">
-                    <button onClick={() => {
-                      setId(provider.id);
-                      setIsModalEditOpen(true);
-                    }
-                    }>
-                      <PencilIcon className="w-6 p-1 bg-yellow-400 text-white rounded-lg" />
-                    </button>
-                    <button onClick={() => handleRemove(provider.id)}>
-                      <TrashIcon className="w-6 p-1 bg-red-400 text-white rounded-lg" />{" "}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+    <>
+      <div className="w-screen h-screen bg-insight-blue flex justify-center items-center">
+        <div className="flex w-[435px] h-[428px] items-center justify-center bg-insight-dark-blue rounded-2xl shadow-lg">
+          <div className="w-[300px] flex-col items-center mx-auto justify-center space-y-2">
+            <Image src={logoInsightLab} alt="Logo Insight Lab" height="100" />
+            <p className="mx-auto text-center text-4 text-insight-white ">
+              Para entrar, insira e-mail e senha.
+            </p>
 
-        {isModalCreateOpen ? (
-          <FormRegister
-            isOpen={isModalCreateOpen}
-            onClose={handleCloseModalCreate}
-          />
-        ) : (
-          <></>
-        )}
+            <form className="space-y-4" onSubmit={(e) => handleSignIn(e)}>
+              <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center">
+                <UserIcon className="h-5 w-5 text-blue-500" />
+                <input
+                  className="bg-inherit w-full px-4 py-1 focus:outline-none "
+                  type="text"
+                  onChange={(e) => setLogin(e.target.value)}
+                  placeholder="E-mail"
+                />
+              </div>
 
-        {isModalEditOpen ? (
-          <FormEdit id={id} isOpen={isModalEditOpen} onClose={handleCloseModalEdit} />
-        ) : (
-          <></>
-        )}
+              <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center justify-between">
+                <KeyIcon className="h-5 w-5 text-insight-icon-blue" />
+                <input
+                  className="bg-inherit w-full px-4 py-1 focus:outline-none"
+                  type={typePass}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Senha"
+                />
+                <EyeIcon
+                  className="h-5 w-5 text-insight-icon-blue hover:cursor-pointer"
+                  onClick={handleTypePass}
+                />
+              </div>
+
+              <button className="flex justify-center w-full bg-insight-button-blue text-white py-2 px-4 rounded-full">
+                {isLoading ? <Loading /> : "Entrar"}
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

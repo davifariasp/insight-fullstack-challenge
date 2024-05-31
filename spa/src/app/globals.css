@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 * {
+  font-family: 'Inter', sans-serif;
   margin: 0;
 }
+
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
