@@ -23,7 +23,7 @@ public class UsersController {
     private UsersRepository repository;
 
     @PostMapping("/login")
-    public ResponseEntity login (@RequestBody @Validated RequestUsers data){
+    public ResponseEntity<Map<String, Object>> login (@RequestBody @Validated RequestUsers data){
         Map<String, Object> res = new HashMap<>();
         try {
             Optional<User> response = repository.findByEmail(data.email());
