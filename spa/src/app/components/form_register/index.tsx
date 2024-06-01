@@ -5,10 +5,11 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 interface FormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  getProviders: () => void;
 }
 
-const FormRegister: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+export default function FormRegister (props: FormModalProps) {
+  if (!props.isOpen) return null;
 
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
@@ -27,6 +28,8 @@ const FormRegister: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
       })
       .then((response) => {
         console.log(response);
+        props.onClose();
+        props.getProviders();
       })
       .catch((error) => {
         console.error(error);
@@ -40,7 +43,7 @@ const FormRegister: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
           <div className="space-y-8">
             <div className="flex flex-col justify-end items-end">
               <button>
-                <XMarkIcon className="text-white h-6" onClick={onClose} />
+                <XMarkIcon className="text-white h-6" onClick={props.onClose} />
               </button>
 
               <p className="mx-auto text-center text-2xl font-bold text-insight-white ">
@@ -100,4 +103,3 @@ const FormRegister: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default FormRegister;

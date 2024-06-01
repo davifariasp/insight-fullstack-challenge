@@ -16,7 +16,7 @@ export default function Home() {
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
 
-  useEffect(() => {
+  const getProviders = () => {
     axios
       .get(`${process.env.NEXT_PUBLIC_URL_API}/provider/all`)
       .then((response) => {
@@ -38,18 +38,14 @@ export default function Home() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }
 
-  const handleOpenModalCreate = () => {
-    setIsModalCreateOpen(true);
-  };
+  useEffect(() => {
+    getProviders();
+  }, []);
 
   const handleCloseModalCreate = () => {
     setIsModalCreateOpen(false);
-  };
-
-  const handleOpenModalEdit = () => {
-    setIsModalEditOpen(true);
   };
 
   const handleCloseModalEdit = () => {
@@ -61,6 +57,7 @@ export default function Home() {
       .delete(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${id}`)
       .then((response) => {
         console.log(response);
+        getProviders();
       })
       .catch((error) => {
         console.log(error);
@@ -135,6 +132,7 @@ export default function Home() {
               <FormRegister
                 isOpen={isModalCreateOpen}
                 onClose={handleCloseModalCreate}
+                getProviders={getProviders}
               />
             ) : (
               <></>
@@ -145,6 +143,7 @@ export default function Home() {
                 id={id}
                 isOpen={isModalEditOpen}
                 onClose={handleCloseModalEdit}
+                getProviders={getProviders}
               />
             ) : (
               <></>

@@ -1,15 +1,17 @@
 import axios from "axios";
 import { FormEvent, useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { get } from "http";
 
 interface FormModalProps {
   id: Number;
   isOpen: boolean;
   onClose: () => void;
+  getProviders: () => void;
 }
 
-const FormEdit: React.FC<FormModalProps> = ({ id, isOpen, onClose }) => {
-  if (!isOpen) return null;
+export default function FormEdit(props: FormModalProps) {
+  if (!props.isOpen) return null;
 
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
@@ -18,7 +20,7 @@ const FormEdit: React.FC<FormModalProps> = ({ id, isOpen, onClose }) => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${id}`)
+      .get(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${props.id}`)
       .then((response) => {
         setName(response.data.name);
         setContact(response.data.contact);
@@ -34,7 +36,7 @@ const FormEdit: React.FC<FormModalProps> = ({ id, isOpen, onClose }) => {
     e.preventDefault();
 
     axios
-      .put(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${id}`, {
+      .put(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${props.id}`, {
         name: name,
         contact: contact,
         type: type,
@@ -42,6 +44,8 @@ const FormEdit: React.FC<FormModalProps> = ({ id, isOpen, onClose }) => {
       })
       .then((response) => {
         console.log(response);
+        props.onClose();
+        props.getProviders();
       })
       .catch((error) => {
         console.error(error);
@@ -55,7 +59,7 @@ const FormEdit: React.FC<FormModalProps> = ({ id, isOpen, onClose }) => {
           <div className="space-y-8">
             <div className="flex flex-col justify-end items-end">
               <button>
-                <XMarkIcon className="text-white h-6" onClick={onClose} />
+                <XMarkIcon className="text-white h-6" onClick={props.onClose} />
               </button>
 
               <p className="mx-auto text-center text-2xl font-bold text-insight-white ">
@@ -115,6 +119,4 @@ const FormEdit: React.FC<FormModalProps> = ({ id, isOpen, onClose }) => {
       </div>
     </>
   );
-};
-
-export default FormEdit;
+}
