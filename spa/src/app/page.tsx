@@ -79,6 +79,7 @@ export default function Login() {
                 />
               </div>
 
+              {/* Quando você tem um botão dentro de um formulário (<form>), ele será tratado como um botão de submissão (submit) por padrão. */}
               <button className="flex justify-center w-full bg-insight-button-blue text-white py-2 px-4 rounded-full">
                 {isLoading ? <Loading /> : "Entrar"}
               </button>

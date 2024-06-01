@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FormEvent, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import Loading from "../loading";
 
 interface FormModalProps {
   isOpen: boolean;
@@ -8,32 +9,38 @@ interface FormModalProps {
   getProviders: () => void;
 }
 
-export default function FormRegister (props: FormModalProps) {
+export default function FormRegister(props: FormModalProps) {
   if (!props.isOpen) return null;
 
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubimit = (e: FormEvent) => {
+  function handleSubimit (e: FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
 
-    axios
-      .post(`${process.env.NEXT_PUBLIC_URL_API}/provider`, {
-        name: name,
-        contact: contact,
-        type: type,
-        additionalInfo: additionalInfo,
-      })
-      .then((response) => {
-        console.log(response);
-        props.onClose();
-        props.getProviders();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    setTimeout(() => {
+      axios
+        .post(`${process.env.NEXT_PUBLIC_URL_API}/provider`, {
+          name: name,
+          contact: contact,
+          type: type,
+          additionalInfo: additionalInfo,
+        })
+        .then((response) => {
+          console.log(response);
+          setIsLoading(false);
+          props.onClose();
+          props.getProviders();
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.error(error);
+        });
+    }, 1000);
   };
 
   return (
@@ -90,16 +97,13 @@ export default function FormRegister (props: FormModalProps) {
                 />
               </div>
 
-              <input
-                className="w-full hover:cursor-pointer bg-insight-button-blue text-white py-2 px-4 rounded-full"
-                type="submit"
-                value="Enviar"
-              />
+              <button className="flex justify-center w-full bg-insight-button-blue text-white py-2 px-4 rounded-full">
+                {isLoading ? <Loading /> : "Enviar"}
+              </button>
             </form>
           </div>
         </div>
       </div>
     </>
   );
-};
-
+}

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FormEvent, useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { get } from "http";
+import Loading from "../loading";
 
 interface FormModalProps {
   id: Number;
@@ -17,6 +17,7 @@ export default function FormEdit(props: FormModalProps) {
   const [contact, setContact] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     axios
@@ -32,24 +33,29 @@ export default function FormEdit(props: FormModalProps) {
       });
   }, []);
 
-  const handleSubimit = (e: FormEvent) => {
+  function handleSubimit (e: FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
 
-    axios
-      .put(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${props.id}`, {
-        name: name,
-        contact: contact,
-        type: type,
-        additionalInfo: additionalInfo,
-      })
-      .then((response) => {
-        console.log(response);
-        props.onClose();
-        props.getProviders();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    setTimeout(() => {
+      axios
+        .put(`${process.env.NEXT_PUBLIC_URL_API}/provider?id=${props.id}`, {
+          name: name,
+          contact: contact,
+          type: type,
+          additionalInfo: additionalInfo,
+        })
+        .then((response) => {
+          setIsLoading(false);
+          console.log(response);
+          props.onClose();
+          props.getProviders();
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.error(error);
+        });
+    }, 1000);
   };
 
   return (
@@ -108,11 +114,9 @@ export default function FormEdit(props: FormModalProps) {
                 />
               </div>
 
-              <input
-                className="w-full hover:cursor-pointer bg-insight-button-blue text-white py-2 px-4 rounded-full"
-                type="submit"
-                value="Atualizar"
-              />
+              <button className="flex justify-center w-full bg-insight-button-blue text-white py-2 px-4 rounded-full">
+                {isLoading ? <Loading /> : "Atualizar"}
+              </button>
             </form>
           </div>
         </div>
