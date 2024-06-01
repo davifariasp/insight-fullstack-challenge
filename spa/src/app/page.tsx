@@ -6,11 +6,12 @@ import { FormEvent, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Loading from "./components/loading";
+import axios from "axios";
 
 export default function Login() {
   const router = useRouter();
 
-  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [typePass, setTypePass] = useState("password");
 
@@ -20,14 +21,28 @@ export default function Login() {
     setTypePass(typePass === "password" ? "text" : "password");
   }
 
-  const handleSignIn = (e: FormEvent) => {
+  function handleLogin(e: FormEvent) {
     e.preventDefault();
     setIsLoading(true);
 
     setTimeout(() => {
-      router.push("/home");
-    }, 2000);
-  };
+      axios
+        .post(`${process.env.NEXT_PUBLIC_URL_API}/users/login`, {
+          email: email,
+          senha: password,
+        })
+        .then((res) => {
+          setIsLoading(false);
+          localStorage.setItem("token", "logado");
+
+          router.push("/home");
+        })
+        .catch((res) => {
+          setIsLoading(false);
+          console.log(res.response.data);
+        });
+    }, 1000);
+  }
 
   return (
     <>
@@ -39,13 +54,13 @@ export default function Login() {
               Para entrar, insira e-mail e senha.
             </p>
 
-            <form className="space-y-4" onSubmit={(e) => handleSignIn(e)}>
+            <form className="space-y-4" onSubmit={handleLogin}>
               <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center">
                 <UserIcon className="h-5 w-5 text-blue-500" />
                 <input
                   className="bg-inherit w-full px-4 py-1 focus:outline-none "
                   type="text"
-                  onChange={(e) => setLogin(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="E-mail"
                 />
               </div>
