@@ -75,6 +75,7 @@ export default function FormEdit(props: FormModalProps) {
 
             <form className="w-[350px] space-y-4" onSubmit={handleSubimit}>
               <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center">
+              <label className="text-insight-dark-blue text-sm">Nome:</label>
                 <input
                   className="bg-inherit w-full px-4 py-1 focus:outline-none "
                   value={name}
@@ -85,6 +86,7 @@ export default function FormEdit(props: FormModalProps) {
               </div>
 
               <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center">
+              <label className="text-insight-dark-blue text-sm">Contato:</label>
                 <input
                   className="bg-inherit w-full px-4 py-1 focus:outline-none "
                   value={contact}
@@ -95,6 +97,7 @@ export default function FormEdit(props: FormModalProps) {
               </div>
 
               <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center">
+              <label className="text-insight-dark-blue text-sm">Tipo:</label>
                 <input
                   className="bg-inherit w-full px-4 py-1 focus:outline-none "
                   value={type}
@@ -105,6 +108,7 @@ export default function FormEdit(props: FormModalProps) {
               </div>
 
               <div className="bg-neutral-100 rounded-full flex flex-row px-4 py-2 items-center">
+              <label className="text-insight-dark-blue text-sm">Descrição:</label>
                 <input
                   className="bg-inherit w-full px-4 py-1 focus:outline-none "
                   value={additionalInfo}
