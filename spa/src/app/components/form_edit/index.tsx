@@ -2,6 +2,7 @@ import axios from "axios";
 import { FormEvent, useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Loading from "../loading";
+import { useMask } from '@react-input/mask';
 
 interface FormModalProps {
   id: Number;
@@ -12,6 +13,8 @@ interface FormModalProps {
 
 export default function FormEdit(props: FormModalProps) {
   if (!props.isOpen) return null;
+
+  const inputRef = useMask({ mask: '+55 (__) _.____-____', replacement: { _: /\d/ } });
 
   const [name, setName] = useState<string>("");
   const [contact, setContact] = useState<string>("");
@@ -92,6 +95,7 @@ export default function FormEdit(props: FormModalProps) {
                   value={contact}
                   type="text"
                   onChange={(e) => setContact(e.target.value)}
+                  ref={inputRef}
                   placeholder="Contato"
                 />
               </div>
