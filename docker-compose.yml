@@ -45,8 +45,8 @@ services:
       - ./spa/.env
 
   nginx:
-    container_name: nginx-neuron5
-    image: nginx-neuron5
+    container_name: nginx-insightlab
+    image: nginx-insightlab
     build: ./nginx
     ports:
       - 80:80
