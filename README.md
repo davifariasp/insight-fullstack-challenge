@@ -58,7 +58,6 @@ As restrições para esse desafio são:
 - Docker
 
 Além das tecnologias obrigatórias, acabei me empolgando e usando Docker e Nginx no projeto. 
-(Add:Poque fiz isso?)
 
 ## :sos: Desafios
 
