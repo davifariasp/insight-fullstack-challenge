@@ -22,47 +22,42 @@ services:
     depends_on:
       - postgres
   
-  # api:
-  #   container_name: api-insightlab
-  #   image: api-neuron5
-  #   build: ./api
-  #   restart: always
-  #   ports:
-  #     - 3001:3001
-  #   depends_on:
-  #     - mysql
-  #   env_file:
-  #     - ./api/.env
+  api:
+    container_name: api-insightlab
+    image: api-insightlab
+    build: ./api
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
   
-  # spa:
-  #   container_name: spa-neuron5
-  #   image: spa-neuron5
-  #   build: ./spa
-  #   restart: always
-  #   ports:
-  #     - 3002:3002
-  #   volumes:
-  #     - spa-neuron5:/var/www/html
-  #   depends_on:
-  #     - api
-  #   env_file:
-  #     - ./spa/.env
+  spa:
+    container_name: spa-insightlab
+    image: spa-insightlab
+    build: ./spa
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
+    env_file:
+      - ./spa/.env
 
-  # nginx:
-  #   container_name: nginx-neuron5
-  #   image: nginx-neuron5
-  #   build: ./nginx
-  #   volumes:
-  #     - spa-neuron5:/var/www/html
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - mysql
-  #     - api
-  #     - spa
+  nginx:
+    container_name: nginx-neuron5
+    image: nginx-neuron5
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - postgres
+      - api
+      - spa
     
 volumes:
   database:
+  spa-insightlab:
 
 networks:
   default:

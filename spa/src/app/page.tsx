@@ -24,9 +24,8 @@ export default function Login() {
   function handleLogin(e: FormEvent) {
     e.preventDefault();
     setIsLoading(true);
-
-    setTimeout(() => {
-      axios
+    
+    axios
         .post(`${process.env.NEXT_PUBLIC_URL_API}/users/login`, {
           email: email,
           senha: password,
@@ -41,7 +40,6 @@ export default function Login() {
           setIsLoading(false);
           console.log(res.response.data);
         });
-    }, 1000);
   }
 
   return (
