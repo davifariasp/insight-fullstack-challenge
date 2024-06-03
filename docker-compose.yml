@@ -44,16 +44,16 @@ services:
     env_file:
       - ./spa/.env
 
-  # nginx:
-  #   container_name: nginx-insightlab
-  #   image: nginx-insightlab
-  #   build: ./nginx
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - postgres
-  #     - api
-  #     - spa
+  nginx:
+    container_name: nginx-insightlab
+    image: nginx-insightlab
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - postgres
+      - api
+      - spa
     
 volumes:
   database:
