@@ -177,8 +177,24 @@ As tecnologias a seguir são necessárias para conseguir rodar o projeto em sua 
 
   # Entrar no diretório:
   $ cd insight-fullstack-challenge
+
+  # Entrar da spa:
+  $ cd spa
+
+  #Adicionar variável de ambiente
+  $ nano .env
+
+  #Vai colar:
+
+  NEXT_PUBLIC_URL_API = http://localhost:api
   
-  # Instalar as dependências:
+  #Vai salvar
+  [CTRL + O] de depois [ENTER]
+
+  #Depois fechar editor
+  [CTRL + X]
+
+  # Compor o projeto:
   $ docker compose up -d
 
   # Acesso o front:
